@@ -29,9 +29,11 @@ var courses = []course{
 
 func main() {
 	router := gin.Default()
-	router.GET("/courses", getCourses)
-	router.GET("/courses/:id", getCourseByID)
-	router.POST("/courses", postCourses)
+	router.GET("/Courses", getCourses)
+	router.GET("/Courses/Major/:Major", getCourseByCourseMajor)
+	router.GET("/Courses/CourseID/:CourseID", getCourseByCourseID)
+	router.GET("/Courses/ID/:ID", getCoursesByID)
+	router.POST("/Courses", postCourses)
 
 	err := router.Run("localhost:8080")
 	if err != nil {
@@ -62,16 +64,50 @@ func postCourses(c *gin.Context) {
 
 // getCourseByID locates the Course whose ID value matches the id
 // parameter sent by the client, then returns that Course as a response.
-func getCourseByID(c *gin.Context) {
-	id := c.Param("id")
+func getCourseByCourseID(c *gin.Context) {
+	courseID := c.Param("CourseID")
 
 	// Loop through the list of Courses, looking for
 	// a Course whose ID value matches the parameter.
 	for _, a := range courses {
-		if a.ID == id {
+		if a.CourseID == courseID {
 			c.IndentedJSON(http.StatusOK, a)
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "course not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "course id not found"})
+}
+func getCoursesByID(c *gin.Context) {
+	courseID := c.Param("ID")
+
+	// Loop through the list of Courses, looking for
+	// a Course whose ID value matches the parameter.
+	found := false
+	for _, a := range courses {
+		if a.ID == courseID {
+			c.IndentedJSON(http.StatusOK, a)
+			found = true
+		}
+	}
+	if !found {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id not found"})
+	}
+}
+
+func getCourseByCourseMajor(c *gin.Context) {
+	courseMajor := c.Param("Major")
+
+	// Loop through the list of Courses, looking for
+	// a Course whose ID value matches the parameter.
+	found := false
+	for _, a := range courses {
+		if a.CourseMajor == courseMajor {
+			c.IndentedJSON(http.StatusOK, a)
+			found = true
+
+		}
+	}
+	if !found {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "course major not found"})
+	}
 }
