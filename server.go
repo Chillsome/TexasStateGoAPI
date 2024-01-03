@@ -62,7 +62,7 @@ func postCourses(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newCourse)
 }
 
-// getCourseByID locates the Course whose ID value matches the id
+// getCourseByCourseID locates the Course whose ID value matches the id
 // parameter sent by the client, then returns that Course as a response.
 func getCourseByCourseID(c *gin.Context) {
 	courseID := c.Param("CourseID")
@@ -77,6 +77,10 @@ func getCourseByCourseID(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "course id not found"})
 }
+
+// getCoursesByID locates the Course whose ID value matches the id
+// parameter sent by the client, then returns that Courses as a response.
+// CAN HAVE MULTIPLE COURSES RETURNED FROM DIFFERENT MAJORS.
 func getCoursesByID(c *gin.Context) {
 	courseID := c.Param("ID")
 
@@ -94,6 +98,9 @@ func getCoursesByID(c *gin.Context) {
 	}
 }
 
+// getCourseByCourseMajor locates the Course whose ID value matches the id
+// parameter sent by the client, then returns that Courses as a response.
+// This will return all the classes in the major specified.
 func getCourseByCourseMajor(c *gin.Context) {
 	courseMajor := c.Param("Major")
 
